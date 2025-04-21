@@ -10,4 +10,6 @@ A set of simple STM32 libraries I use in my projects. Each folder contains confi
 
 ## Available Libraries
 
-- PWM Library — A utility for managing PWM signals with STM32 timers, allowing frequency and duty cycle adjustment.
+- PWM Library — A utility for managing PWM signals with timers, allowing frequency and duty cycle adjustment.
+
+- KY-023 Library — A library for interfacing with the KY-023 joystick module, allowing reading of X and Y axis values and joystick switch state using ADC channels.
