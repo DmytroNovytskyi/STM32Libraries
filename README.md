@@ -20,4 +20,6 @@ A set of simple STM32 libraries I use in my own projects. Each folder contains d
 
 - **Polynomial Library** - Assists in the creation and manipulation of polynomials, providing functions for fitting polynomials to data points and calculating deviations.
 
-- **AT24Cxx EEPROM Library** - Simplifies interaction with AT24Cxx series EEPROM chips via the I2C protocol. It supports reading and writing single bytes, as well as efficient multi-byte operations with automatic page boundary handling. Includes a full memory erase function.
+- **AT24Cxx Library** - Simplifies interaction with AT24Cxx series EEPROM chips via the I2C protocol. It supports reading and writing single bytes, as well as efficient multi-byte operations with automatic page boundary handling. Includes a full memory erase function.
+
+- **SSD1306 Library** - Provides a driver for controlling SSD1306-based OLED displays via I2C. Includes functions for initialization, drawing various shapes, text, and bitmaps.
