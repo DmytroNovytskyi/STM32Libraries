@@ -2,7 +2,7 @@
 
 ## Version
 
-### *1.0*
+### *1.1*
 
 ## Author
 
@@ -54,7 +54,6 @@ The AT24Cxx series EEPROMs use pins A0, A1, and A2 to form the lower bits of the
 
 - Connect A0, A1, A2 to `GND` if you are using the default device address (0x50).
 - If connecting multiple EEPROMs to the same bus, connect these pins to different combinations of `GND`/`Vcc` to assign unique addresses.
-- The `AT24CXX_Init` function takes `a0`, `a1`, `a2` parameters to reflect these physical connections.
 
 The WP pin on the AT24Cxx EEPROM is a critical control input that prevents write operations to the entire memory array when asserted.
 
@@ -67,12 +66,16 @@ The WP pin on the AT24Cxx EEPROM is a critical control input that prevents write
 ## Example Usage
 
 ```c
-AT24CXX_HandleTypeDef eeprom;
+AT24CXX_HandleTypeDef eeprom = {
+  .hi2c = &hi2c1,
+  .deviceAddress = (AT24CXX_BASE_ADDRESS | 0x04) << 1, //A2=1, A1=0, A0=0
+  .memorySizeKbit = 256,
+  .pageSize = 64
+};
 uint16_t address = 0x0010;
 uint8_t[2] dataToWrite = { 0xAA, 0xBB };
 uint8_t[2] readData;
 
-AT24CXX_Init(&eeprom, &hi2c1, 0, 0, 0, 256, 64);
 if(AT24CXX_IsDeviceReady(&eeprom, 3, 100)){
     AT24CXX_Erase(&eeprom, 500);
 }

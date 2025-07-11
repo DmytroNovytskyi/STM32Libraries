@@ -4,7 +4,7 @@
  * This library provides a simple abstraction for controlling AT24Cxx EEPROM chip using I2C protocol.
  *
  * Author: Dmytro Novytskyi
- * Version: 1.0
+ * Version: 1.1
  */
 
 #ifndef AT24CXX_H
@@ -14,7 +14,8 @@
 
 /**
  * @brief Base 7-bit I2C address for AT24Cxx series EEPROMs.
- * This is the fixed part of the device address. The full address will also include A0, A1, A2 pins.
+ * This is the fixed part of the device address before shifting.
+ * The full address will also include A0, A1, A2 pins.
  */
 #define AT24CXX_BASE_ADDRESS 0x50
 
@@ -24,38 +25,18 @@
  * This structure holds the configuration and state for an AT24Cxx EEPROM device.
  *
  * Fields:
- * - hi2c:       	   Pointer to the HAL I2C handle associated with this EEPROM.
- * - deviceAddress:    The full 8-bit I2C device address, including the R/W bit space (7-bit address shifted left by 1).
- * - memorySizeKbit:   The total memory size of the EEPROM chip in kilobits (e.g., 256 for AT24C256/24LC256).
- * - pageSize:         The write page size in bytes (e.g., 64 for AT24C256/24LC256).
- * - maxMemoryAddress: The maximum valid memory address of the EEPROM (0-indexed).
+ * - hi2c:           Pointer to the HAL I2C handle associated with this EEPROM.
+ * - deviceAddress:  The full 8-bit I2C device address, including the R/W bit space
+ * 				     (7-bit address shifted left by 1). Example: A2 = 1, A1 = 0, A0 = 0 -> 0xA8
+ * - memorySizeKbit: The total memory size of the EEPROM chip in kilobits (e.g., 256 for AT24C256/24LC256).
+ * - pageSize:       The write page size in bytes (e.g., 64 for AT24C256/24LC256).
  */
 typedef struct {
 	I2C_HandleTypeDef *hi2c;
 	uint8_t deviceAddress;
 	uint16_t memorySizeKbit;
 	uint16_t pageSize;
-	uint16_t maxMemoryAddress;
 } AT24CXX_HandleTypeDef;
-
-/**
- * @brief Initializes an AT24Cxx EEPROM handle.
- *
- * Configures the AT24CXX_HandleTypeDef structure with the I2C handle,
- * device specific address bits (A0, A1, A2), memory size, and page size.
- * This function does not perform any I2C communication.
- *
- * @param handle     Pointer to the AT24CXX_HandleTypeDef structure to initialize.
- * @param hi2c		 Pointer to the HAL I2C peripheral handle (e.g., &hi2c1).
- * @param a0      	 Value of the A0 address pin (0 or 1).
- * @param a1      	 Value of the A1 address pin (0 or 1).
- * @param a2	     Value of the A2 address pin (0 or 1).
- * @param memoryKbit Total memory size of the EEPROM in kilobits (e.g., 256, 512).
- * @param pageSize   The write page size of the EEPROM in bytes (e.g., 64, 128).
- * @return 			 HAL_StatusTypeDef HAL_OK if initialization is successful, HAL_ERROR otherwise.
- */
-HAL_StatusTypeDef AT24CXX_Init(AT24CXX_HandleTypeDef *handle, I2C_HandleTypeDef *hi2c, uint8_t a0, uint8_t a1,
-		uint8_t a2, uint16_t memoryKbit, uint16_t pageSize);
 
 /**
  * @brief Checks if the AT24Cxx EEPROM device is ready for communication.
