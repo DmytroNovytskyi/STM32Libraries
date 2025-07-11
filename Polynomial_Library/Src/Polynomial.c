@@ -2,9 +2,12 @@
  * @brief This library assists in creation of polynomial
  *
  * Author: Dmytro Novytskyi
- * Version: 1.0
+ * Version: 1.1
  */
 
+#include <math.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include "Polynomial.h"
 
 #define MATRIX_VALUE_PTR( pA, row, col )  (&(((pA)->pContents)[ (row * (pA)->cols) + col]))
@@ -19,6 +22,7 @@ static MatrixT* Polynomial_CreateMatrix(int rows, int cols);
 static MatrixT* Polynomial_TransposeMatrix(MatrixT *pMat);
 static MatrixT* Polynomial_CreateProduct(MatrixT *pLeft, MatrixT *pRight);
 static void Polynomial_DestroyMatrix(MatrixT *pMat);
+static double Polynomial_Power(double base, uint32_t exponent);
 
 void Polynomial_Fit(Point *points, int pointCount, double *coefficientResults, int coefficientCount) {
 	// Make the A matrix:
@@ -26,7 +30,7 @@ void Polynomial_Fit(Point *points, int pointCount, double *coefficientResults, i
 	MatrixT *pMatA = Polynomial_CreateMatrix(pointCount, coefficientCount);
 	for (int r = 0; r < pointCount; r++) {
 		for (int c = 0; c < coefficientCount; c++) {
-			*(MATRIX_VALUE_PTR(pMatA, r, c)) = pow((points[r].x), (double) (degree - c));
+			*(MATRIX_VALUE_PTR(pMatA, r, c)) = Polynomial_Power((points[r].x), degree - c);
 		}
 	}
 
@@ -90,10 +94,18 @@ void Polynomial_GetDeviation(Point *points, int pointCount, double *coefficients
 	for (int i = 0; i < pointCount; i++) {
 		double result = 0;
 		for (int j = 0; j < coefficientCount; j++) {
-			result += coefficients[j] * pow(points[i].x, (double) (coefficientCount - 1 - j));
+			result += coefficients[j] * Polynomial_Power(points[i].x, coefficientCount - 1 - j);
 		}
 		deviationResults[i] = fabs(points[i].y - result);
 	}
+}
+
+double Polynomial_Calculate(double *coefficients, int coefficientCount, double value) {
+	double result = 0.0;
+	for (int i = 0; i < coefficientCount; i++) {
+		result += coefficients[coefficientCount - 1 - i] * Polynomial_Power(value, i);
+	}
+	return result;
 }
 
 static MatrixT* Polynomial_CreateMatrix(int rows, int cols) {
@@ -157,5 +169,17 @@ static void Polynomial_DestroyMatrix(MatrixT *pMat) {
 		}
 		free(pMat);
 	}
+}
+
+static double Polynomial_Power(double base, uint32_t exponent) {
+	if (base == 0.0 && exponent == 0) {
+		return 1.0;
+	}
+
+	double result = 1.0;
+	for (uint32_t i = 0; i < exponent; i++) {
+		result *= base;
+	}
+	return result;
 }
 

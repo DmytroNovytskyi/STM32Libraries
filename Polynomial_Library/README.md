@@ -2,7 +2,7 @@
 
 ## Version
 
-### *1.0*
+### *1.1*
 
 ## Author
 
@@ -31,9 +31,11 @@ Point points[DATA_SIZE] = {
 };
 double coefficients[COEFFICIENTS_SIZE];
 double deviation[DATA_SIZE] = { 0 };
+double result;
 
 Polynomial_Fit(points, DATA_SIZE, coefficients, COEFFICIENTS_SIZE);
 Polynomial_GetDeviation(points, DATA_SIZE, coefficients, COEFFICIENTS_SIZE, deviation);
+result = Polynomial_Calculate(coefficients, COEFFICIENTS_SIZE, -1);
 ```
 
 ## Results
@@ -61,3 +63,7 @@ Given the input points for the polynomial $y=x^2-3x+2$, and with the `Polynomial
 | `deviation[4]` | `~4.40e-16` |
 | `deviation[5]` | `~1.33e-15` |
 | `deviation[6]` | `~1.77e-15` |
+
+---
+
+**P(-1):** `result` = `5.9999999999999991`

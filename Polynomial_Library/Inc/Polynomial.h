@@ -4,14 +4,11 @@
  * This library provides functions for fitting polynomials to data points and calculating deviations.
  *
  * Author: Dmytro Novytskyi
- * Version: 1.0
+ * Version: 1.1
  */
 
 #ifndef POLYNOMIAL_H
 #define POLYNOMIAL_H
-
-#include <math.h>
-#include <stdlib.h>
 
 /**
  * @brief Represents a 2D point.
@@ -58,5 +55,18 @@ void Polynomial_Fit(Point *points, int pointCount, double *coefficientResults, i
  */
 void Polynomial_GetDeviation(Point *points, int pointCount, double *coefficients, int coefficientCount,
 		double *deviationResults);
+
+/**
+ * @brief Calculates the value of a polynomial for a given 'x' value.
+ *
+ * This function evaluates a polynomial $P(x)$ using its coefficients at 'value'.
+ * The polynomial is $P(x) = c_nx^n + c_{n-1}x^{n-1} + \dots + c_1x + c_0$.
+ *
+ * @param coefficients     Array of polynomial coefficients ($c_n$ to $c_0$).
+ * @param coefficientCount Number of coefficients (degree + 1).
+ * @param value            The 'x' value for evaluation.
+ * @return 				   The calculated polynomial value.
+ */
+double Polynomial_Calculate(double *coefficients, int coefficientCount, double value);
 
 #endif // POLYNOMIAL_H
